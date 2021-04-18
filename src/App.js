@@ -1,8 +1,10 @@
-import React, { Fragment, useState, useEffect, useCallback } from "react";
+import React, { createContext, useState, useEffect, useCallback } from "react";
 import Login from "./components/Login";
 import Header from "./components/Header";
 import CreatePost from "./components/CreatePost";
 import PostList from "./components/PostList";
+
+export const UserContext = createContext();
 
 function App() {
 	const [user, setUser] = useState("Reese");
@@ -12,7 +14,8 @@ function App() {
 		document.title = user ? `${user}'s Feed` : "Please log in";
 	}, [user]);
 
-	const handleAddPost = useCallback( // renders when posts changes only 
+	const handleAddPost = useCallback(
+		// renders when posts changes only
 		(newPost) => {
 			setPosts([newPost, ...posts]);
 		},
@@ -25,11 +28,11 @@ function App() {
 	}
 
 	return (
-		<Fragment>
+		<UserContext.Provider value={user}>
 			<Header user={user} setUser={setUser} />
 			<CreatePost user={user} handleAddPost={handleAddPost} />
 			<PostList posts={posts} />
-		</Fragment>
+		</UserContext.Provider>
 	);
 }
 
